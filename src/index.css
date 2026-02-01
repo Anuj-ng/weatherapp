@@ -1,59 +1,207 @@
-@import url("https://fonts.googleapis.com/css2?family=Jost:wght@300&family=Martian+Mono:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
+/* RESET */
 * {
   margin: 0;
   padding: 0;
-  font-family: "Jost", sans-serif;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
+
+/* BODY / CANVAS */
 body {
-  background: #f3f2ef;
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  height: 100vh;
-  width: 100vw;
-  font-family: "Jost", sans-serif;
+  overflow: hidden;
+  position: relative;
 }
 
-html {
-  font-size: 100%;
-  height: 100%;
+/* =============================== */
+/* 🌤️ WEATHER ICON CLOUD BACKDROP */
+/* =============================== */
+
+body::before {
+  content:
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "🌧️ ☁️ ☀️ ❄️ 🌩️ 🌦️ ⛅ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ 🌦️\A"
+    "☁️ 🌧️ ☀️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅\A"
+    "🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️";
+  position: absolute;
+  inset: -30%;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.6;
+  letter-spacing: 3rem;
+  text-align: center;
+  opacity: 0.06;
+  color: #ffffff;
+  animation: cloudDrift 60s linear infinite;
+  white-space: pre;
+  z-index: 0;
+  pointer-events: none;
 }
+
+@keyframes cloudDrift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-35%);
+  }
+}
+
+/* =============================== */
+/* 📝 APP TITLE (TOP TEXT)         */
+/* =============================== */
+
+body::after {
+  content: "WEATHER  APP";
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.85);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* =============================== */
+/* CARD / STAGE                    */
+/* =============================== */
 
 .box {
-  width: 20vw;
-  height: 60vh;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.2rem 3rem rgba(0, 0, 0, 0.2);
-  background: #a5bbdd;
+  width: min(70vw, 900px);
+  height: min(65vh, 420px);
+  min-width: 320px;
+  min-height: 360px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(22px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
   position: relative;
   overflow: hidden;
-  transform: translate3d(0, 0, 0);
-  min-width: 20rem;
-  min-height: 35rem;
+  display: grid;
+  grid-template-rows: 20% 80%;
+  z-index: 2;
+  transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease,
+    backdrop-filter 0.45s ease,
+    border 0.45s ease;
 }
+
+/* HOVER */
+.box:hover {
+  transform: translateY(-10px);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 55px 120px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(255, 255, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* INPUT */
 .inputData {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 10vh;
-  border-radius: 10%;
-  /* border: none; */
+  z-index: 5;
 }
-.inputField{
-  border-radius:7%;
+
+.inputField {
+  width: 240px;
+  height: 42px;
+  border-radius: 999px;
   border: none;
-  height: 5vh;
-  background: #dedede;
+  outline: none;
+  text-align: center;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.inputField:focus {
+  width: 280px;
+  background: #ffffff;
+}
+
+/* ERROR */
+.errorMessage {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* INFO */
+.info {
+  position: relative;
+  z-index: 4;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   text-align: center;
 }
-input[type="text"]
-{
-    background: rgba(0, 0, 0, 0);
-    border: none;
-    outline: none;
+
+/* LOCATION */
+.location {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
 }
+
+/* ICON */
+.fa-street-view {
+  margin-right: 8px;
+  animation: floatIcon 2.2s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* TEMP */
+.temp {
+  font-size: 4rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* MIN / MAX */
+.tempmin_max {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+}
+
+/* =============================== */
+/* 🌊 WAVE (UNCHANGED)             */
+/* =============================== */
+
 .wave {
   opacity: 0.3;
   position: absolute;
@@ -69,153 +217,46 @@ input[type="text"]
   animation: drift 3000ms infinite linear;
   z-index: 1;
 }
-.errorMessage{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 900;
-}
+
 .-three {
   animation: drift 5000ms infinite linear;
   z-index: 2 !important;
   opacity: 0.2;
 }
+
 .-two {
   animation: drift 5000ms infinite linear;
   z-index: 3 !important;
   opacity: 0.1;
 }
-.box:after {
-  content: "";
-  display: block;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  transform: translate3d(0, 0, 0);
-}
 
 @keyframes drift {
-  from {
-    transform: rotate(360deg);
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  body::after {
+    top: 20px;
+    letter-spacing: 0.25em;
   }
-  from {
-    transform: rotate(360deg);
+
+  body::before {
+    font-size: 2.2rem;
+    letter-spacing: 1.8rem;
   }
-}
-.info {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 45%;
-  z-index: 4;
-}
-.location {
-  margin-top: 0.5rem;
-  text-align: center;
-  font-weight: 600;
-  font-size: 2.5rem;
-}
-.fa-street-view {
-  animation: rotates 3s linear infinite alternate;
-}
-@keyframes drift {
-  from {
-    transform: rotate(360deg);
-  }
-  from {
-    transform: rotate(360deg);
-  }
-}
-.info {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 45%;
-  z-index: 4;
-}
-.location {
-  margin-top: 0.5rem;
-  text-align: center;
-  font-weight: 600;
-  font-size: 2.5rem;
-}
-.fa-street-view {
-  animation: rotates 3s linear infinite alternate;
-}
-@keyframes rotates {
-  from {
-    transform: translateX(-0.5rem);
-  }
-  to {
-    transform: translateX(0.5rem);
-  }
-}
-#date {
-  text-align: center;
-  margin-top: 0.5rem;
-  color: #57606f;
-  font-size: 1.2rem;
-  font-weight: 300;
-  text-transform: uppercase;
-}
-.temp {
-  margin-top: 2.5rem;
-  text-align: center;
-  font-size: 3rem;
-}
-.tempmin_max {
-  text-align: center;
-  margin-top: 0.3rem;
-  font-weight: 300;
-  font-size: 1.2rem;
-  color: #57606f;
-}
-#weathericon {
-  height: 55%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 3rem;
-}
-#weathericon .fas {
-  font-size: 6rem;
-  animation: fas-anime 3s linear infinite alternate;
-}
-@keyframes fas-anime {
-  from {
-    transform: scale(0.8);
-  }
-  to {
-    transform: scale(1.2);
-  }
-}
-@media (max-width: 600px) {
+
   .box {
-    width: 90vw;
-    height: 80vh;
+    width: 92vw;
+    height: 75vh;
   }
-  .wave {
-    top: 85%;
+
+  .temp {
+    font-size: 3.2rem;
   }
-  #weathericon {
-    font-size: 5rem;
+
+  .location {
+    font-size: 1.6rem;
   }
-  .info {
-    font-size: 1.5rem;
-  }
-}
-@media (max-height) {
-  .box {
-    height: 80vh;
-  }
-  .wave {
-    top: 115%;
-  }
-}
-body > span {
-  width: 100vw;
-  text-align: center;
-  color: grey;
 }
