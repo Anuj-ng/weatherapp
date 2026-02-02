@@ -10,45 +10,61 @@
 
 /* BODY / CANVAS */
 body {
-  min-height: 100vh;
-  width: 100vw;
+  min-height: 100dvh;        /* mobile-safe fullscreen */
+  width: 100%;
   background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   position: relative;
+
+  /* ❗ allow fixed elements to render freely */
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 /* =============================== */
 /* 🌤️ WEATHER ICON CLOUD BACKDROP */
 /* =============================== */
 
+/* 🌤️ FULLSCREEN WORD / EMOJI CLOUD */
+/* 🌍 FULLSCREEN WORD CLOUD (ENTIRE VIEWPORT) */
+/* 🌍 TRUE FULLSCREEN WORD CLOUD */
 body::before {
-  content:
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
-    "🌧️ ☁️ ☀️ ❄️ 🌩️ 🌦️ ⛅ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ 🌦️\A"
-    "☁️ 🌧️ ☀️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅\A"
-    "🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️";
-  position: absolute;
-  inset: -30%;
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  line-height: 1.6;
-  letter-spacing: 3rem;
+
+  position: fixed;
+  inset: 0;                /* 🔑 EXACT viewport */
+  width: 100vw;
+  height: 100dvh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 1.8;
+  letter-spacing: clamp(1.4rem, 4vw, 3.2rem);
   text-align: center;
+
   opacity: 0.06;
   color: #ffffff;
-  animation: cloudDrift 60s linear infinite;
+
+  animation: cloudDrift 90s linear infinite;
   white-space: pre;
-  z-index: 0;
   pointer-events: none;
+
+  z-index: 1;
 }
+body {
+  position: relative;
+  z-index: 1;
+}
+
+.box {
+  position: relative;
+  z-index: 2;
+}
+
 
 @keyframes cloudDrift {
   from {
@@ -179,9 +195,15 @@ body::after {
 }
 
 @keyframes floatIcon {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 /* TEMP */
@@ -231,8 +253,12 @@ body::after {
 }
 
 @keyframes drift {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* RESPONSIVE */
@@ -258,5 +284,88 @@ body::after {
 
   .location {
     font-size: 1.6rem;
+  }
+}
+/* 📱 MOBILE SCROLLBAR FIX ONLY */
+
+
+/* 🧨 SUB-PIXEL OVERFLOW KILL SWITCH */
+html {
+  overflow-x: clip; /* better than hidden, no layout shift */
+}
+
+/* fallback for older browsers */
+@supports not (overflow-x: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* prevent 1px rounding overflow */
+body {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* emoji backdrop is the main offender */
+body::before {
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+/* card safety */
+.box {
+  max-width: calc(100% - 2px);
+}
+
+/* waves often cause subpixel overflow */
+.wave {
+  will-change: transform;
+}
+/* 🌍 TRUE FULLSCREEN WORD CLOUD (ROOT LEVEL) */
+/* 🌍 NEVER-ENDING FULLSCREEN WORD CLOUD */
+html::before {
+  content:
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    /* 👇 duplicated once for seamless loop */
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️\A"
+    "☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️ ☀️ ☁️ 🌧️ ❄️ 🌩️ ⛅ 🌦️ 🌫️";
+
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 200vh; /* 🔑 double height */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 1.8;
+  letter-spacing: clamp(1.4rem, 4vw, 3.2rem);
+  text-align: center;
+
+  color: #ffffff;
+  opacity: 0.06;
+
+  animation: cloudLoop 120s linear infinite;
+  white-space: pre;
+
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes cloudLoop {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
   }
 }
